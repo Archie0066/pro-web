@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Три простые формы</title>
+    <title>Сайт для ПроВеб</title>
     <style>
         body {
             font-family: Arial;
@@ -78,7 +78,6 @@
 <body>
     <h1>Формы с использованием java-script.</h1>
     
-    <!-- Форма входа -->
     <div class="form-box">
         <h2>Вход в систему</h2>
         <form id="loginForm">
@@ -95,7 +94,6 @@
         <div id="loginResult" class="result" style="display:none"></div>
     </div>
     
-    <!-- Конвертер валют -->
     <div class="form-box">
         <h2>Конвертер валют</h2>
         <form id="currencyForm">
@@ -124,7 +122,6 @@
         <div id="currencyResult" class="result" style="display:none"></div>
     </div>
     
-    <!-- Калькулятор -->
     <div class="form-box">
         <h2>Калькулятор</h2>
         <div class="calc-display" id="display">0</div>
@@ -155,7 +152,6 @@
     </div>
 
     <script>
-        // Форма входа
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             let username = document.getElementById('username').value;
@@ -165,7 +161,6 @@
             resultDiv.style.display = 'block';
         });
         
-        // Конвертер валют
         document.getElementById('currencyForm').addEventListener('submit', function(e) {
             e.preventDefault();
             let amount = parseFloat(document.getElementById('amount').value);
@@ -173,7 +168,6 @@
             let toCurrency = document.getElementById('toCurrency').value;
             let resultDiv = document.getElementById('currencyResult');
             
-            // Курсы валют
             let rates = {
                 'RUB': { 'USD': 0.011, 'EUR': 0.009, 'RUB': 1 },
                 'USD': { 'RUB': 91.5, 'EUR': 0.85, 'USD': 1 },
@@ -185,7 +179,6 @@
             resultDiv.style.display = 'block';
         });
         
-        // Калькулятор
         let displayValue = '0';
         
         function updateDisplay() {
