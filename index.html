@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Три простые формы</title>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        .form-box {
+            background: white;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+        }
+        
+        h2 {
+            margin-top: 0;
+        }
+        
+        .input-group {
+            margin-bottom: 10px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #999;
+        }
+        
+        button {
+            background: #4a86e8;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .result {
+            margin-top: 10px;
+            padding: 8px;
+            background: #e6e6e6;
+        }
+        
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+        }
+        
+        .calc-display {
+            grid-column: 1 / 5;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #999;
+            text-align: right;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Формы с использованием java-script.</h1>
+    
+    <!-- Форма входа -->
+    <div class="form-box">
+        <h2>Вход в систему</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <label>Имя пользователя:</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="input-group">
+                <label>Пароль:</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Войти</button>
+        </form>
+        <div id="loginResult" class="result" style="display:none"></div>
+    </div>
+    
+    <!-- Конвертер валют -->
+    <div class="form-box">
+        <h2>Конвертер валют</h2>
+        <form id="currencyForm">
+            <div class="input-group">
+                <label>Сумма:</label>
+                <input type="number" id="amount" min="0" step="0.01" required>
+            </div>
+            <div class="input-group">
+                <label>Из валюты:</label>
+                <select id="fromCurrency">
+                    <option value="RUB">Рубли</option>
+                    <option value="USD">Доллары</option>
+                    <option value="EUR">Евро</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>В валюту:</label>
+                <select id="toCurrency">
+                    <option value="USD">Доллары</option>
+                    <option value="EUR">Евро</option>
+                    <option value="RUB">Рубли</option>
+                </select>
+            </div>
+            <button type="submit">Рассчитать</button>
+        </form>
+        <div id="currencyResult" class="result" style="display:none"></div>
+    </div>
+    
+    <!-- Калькулятор -->
+    <div class="form-box">
+        <h2>Калькулятор</h2>
+        <div class="calc-display" id="display">0</div>
+        <div class="calculator">
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="deleteLast()">⌫</button>
+            <button onclick="addToDisplay('/')">/</button>
+            <button onclick="addToDisplay('*')">×</button>
+            
+            <button onclick="addToDisplay('7')">7</button>
+            <button onclick="addToDisplay('8')">8</button>
+            <button onclick="addToDisplay('9')">9</button>
+            <button onclick="addToDisplay('-')">-</button>
+            
+            <button onclick="addToDisplay('4')">4</button>
+            <button onclick="addToDisplay('5')">5</button>
+            <button onclick="addToDisplay('6')">6</button>
+            <button onclick="addToDisplay('+')">+</button>
+            
+            <button onclick="addToDisplay('1')">1</button>
+            <button onclick="addToDisplay('2')">2</button>
+            <button onclick="addToDisplay('3')">3</button>
+            <button onclick="calculate()" style="grid-row: span 2">=</button>
+            
+            <button onclick="addToDisplay('0')" style="grid-column: span 2">0</button>
+            <button onclick="addToDisplay('.')">.</button>
+        </div>
+    </div>
+
+    <script>
+        // Форма входа
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let username = document.getElementById('username').value;
+            let resultDiv = document.getElementById('loginResult');
+            
+            resultDiv.textContent = 'Привет, ' + username + '!';
+            resultDiv.style.display = 'block';
+        });
+        
+        // Конвертер валют
+        document.getElementById('currencyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let amount = parseFloat(document.getElementById('amount').value);
+            let fromCurrency = document.getElementById('fromCurrency').value;
+            let toCurrency = document.getElementById('toCurrency').value;
+            let resultDiv = document.getElementById('currencyResult');
+            
+            // Курсы валют
+            let rates = {
+                'RUB': { 'USD': 0.011, 'EUR': 0.009, 'RUB': 1 },
+                'USD': { 'RUB': 91.5, 'EUR': 0.85, 'USD': 1 },
+                'EUR': { 'RUB': 107.5, 'USD': 1.18, 'EUR': 1 }
+            };
+            
+            let result = amount * rates[fromCurrency][toCurrency];
+            resultDiv.textContent = amount + ' ' + fromCurrency + ' = ' + result.toFixed(2) + ' ' + toCurrency;
+            resultDiv.style.display = 'block';
+        });
+        
+        // Калькулятор
+        let displayValue = '0';
+        
+        function updateDisplay() {
+            document.getElementById('display').textContent = displayValue;
+        }
+        
+        function addToDisplay(value) {
+            if (displayValue === '0') {
+                displayValue = value;
+            } else {
+                displayValue += value;
+            }
+            updateDisplay();
+        }
+        
+        function clearDisplay() {
+            displayValue = '0';
+            updateDisplay();
+        }
+        
+        function deleteLast() {
+            if (displayValue.length > 1) {
+                displayValue = displayValue.slice(0, -1);
+            } else {
+                displayValue = '0';
+            }
+            updateDisplay();
+        }
+        
+        function calculate() {
+            try {
+                let expr = displayValue.replace('×', '*');
+                displayValue = eval(expr).toString();
+            } catch (e) {
+                displayValue = 'Ошибка';
+            }
+            updateDisplay();
+        }
+        
+        updateDisplay();
+    </script>
+</body>
+</html>
